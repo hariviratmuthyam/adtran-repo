@@ -1,0 +1,235 @@
+<testbed xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="504VGF2_ISAM_555" schemaVersion="1.0" xsi:noNamespaceSchemaLocation="testbed_dpu.xsd">
+    <Comment>Example file for testbed XML for 504VG DPU test beds</Comment>
+    <tmn>
+        <server ip="10.49.143.20" login="admin" password="admin123" os=""/>
+        <client ip="" login="" password="" os=""/>
+        <core ip="" login="" password="" os=""/>
+        <web ip="" login="" password="" os=""/>
+        <pmaa ip="10.11.12.13" login="pmaLogin" password="totallySecret" vm="1" vmManagementServer="61" sshPort="8033" restconfPort="8444" loghostId="1" pmaaGroup="1">
+        <!-- information about primary PMMA, special attributes:
+                          - vm: VM ID on vm Management Server
+             - vmManagementServer:   id of server in <testbed>/<environment>/<vmManagementServerList>
+             - sshPort:              ssh port of PMAA
+             - restconfPort:         port to be used for Restconf Requests
+             - eventStreamUrlSuffix: ?
+             - dpuRouteId:           ?
+             - networkRouteId:       ?
+        -->
+            <database pmasId="some_id" type="cassandra" username="" password="" keyspace="pmas" replicationFactor="1" protocolVersion="3" port="9042">
+            <!-- database information for primary PMAA, attributes:
+                                  - type:
+                 - protocolVersion:
+            -->
+                <address ip="1.2.3.4" />
+                <address ip="2.3.4.5" />
+            </database>
+            <dhcp>
+                <range id="1" startIp="10.160.60.51" endIp="10.160.60.60" netmask="255.255.255.240" gateway="10.160.60.49" />
+                <range id="2" startIp="10.160.61.51" endIp="10.160.61.60" netmask="/28" gateway="10.160.61.49" />
+            </dhcp>
+            <interfaces>
+                <interface ip="1.2.3.4" netmask="255.0.0.0" gateway="1.0.0.1"/>
+                <interface ip="2.3.4.5" netmask="255.255.0.0" gateway="2.3.0.1"/>
+            </interfaces>
+            <accounts>
+                <account username="admin" password="netvanta" usage="admin"/>
+                <account username="pmasadmin" password="adtran" usage="pmaa"/>
+                <account username="ADTRAN" password="NETVANTA" usage="https"/>
+            </accounts>
+        </pmaa>
+        <mcp ip="10.20.30.42" restconfPort="4321" login="mcpUsername" password="mcpPassword" vm="1" vmManagementServer="61" loghostId="1">
+            <accounts>
+                <account username="admin" password="netvanta" usage="admin"/>
+                <account username="pmasadmin" password="adtran" usage="pmaa"/>
+                <account username="ADTRAN" password="NETVANTA" usage="https"/>
+            </accounts>
+            <takeoutServer ip="123.124.125.126" username="mcpTakeoutServerUsername" password="mcpTakeoutServerPassword" profilesPath="mcpTakeoutServer/profiles/path" />
+        </mcp>
+    </tmn>
+    <dut>
+<dpu name="nbn-ci-alpha" mnemoCode="F:504VG2G:RPF:GPON" serialNumber="ADTN:1906086E" location="room" contact="administrator" dnsName="" pduId="1" pduPort="1/1" pmaName="pma38" capabilities="SELT MELT GBOND RPF" generation="2" managementDomainType="dhcp" profileType="myProfileType" uplinkProfile="myUplinkProfile" pmaaGroup="1">
+            <downlinkPorts>
+                <port id="1" service="gfast" vlanId="571"><!--UNI VLAN - NCD 1-->
+                    <cpe type="Alpha NCD" location="HYD.L2R1.2-A" login="" password=""/>
+                    <switchPort id="2" port="37"/><!--NCD Connected to mentioned port in switch id mentioned-->
+                    <pduPort id="1" port="1/1"/>
+                </port>
+                <port id="2" service="gfast" vlanId="572"><!--UNI VLAN - NCD 2-->
+                    <cpe type="Alpha NCD" location="HYD.L2R1.2-A" login="" password=""/>
+                    <switchPort id="2" port="38"/><!--NCD Connected to mentioned port in switch id mentioned-->
+                    <pduPort id="1" port="1/2"/>
+                </port>
+                <port id="3" service="gfast" vlanId="573"><!--UNI VLAN - NCD 3-->
+                    <cpe type="Alpha NCD" location="HYD.L2R1.2-A" login="" password=""/>
+                    <switchPort id="2" port="39"/><!--NCD Connected to mentioned port in switch id mentioned-->
+                    <pduPort id="1" port="1/3"/>
+                </port>
+                <port id="4" service="gfast" vlanId="574"><!--UNI VLAN - NCD 4-->
+                    <cpe type="Alpha NCD" location="HYD.L2R1.2-A" login="" password=""/>
+                    <switchPort id="2" port="40"/><!--NCD Connected to mentioned port in switch id mentioned-->
+                    <pduPort id="1" port="1/4"/>
+                </port>
+            </downlinkPorts>
+            <uplinkPorts>
+                <port id="1" type="sfp.electrical" vlanId="1" >
+                    <pon oltId="1" onuAddress="1/1/1/6/56" serialNumber="ADTN:1906086E" vlan="561"><!--NNI VLAN (can be incremented till 565)-->
+                        <uplink address="nt-a:xfp:4"><!--Uplink port connected to isam -->
+                            <switchPort id="1" port="52" /><!--uplink port in isam connected to the mentioned port in switch id 1-->
+                        </uplink>
+                    </pon>
+                </port>
+                <port id="2" type="sfp.electrical" vlanId="1" >
+                    <pon oltId="2" onuAddress="1/3/8/49" serialNumber="ADTN1906086E" vlan="2670">
+                        <uplink address="tg-1/A/1">
+                            <switchPort id="1" port="1" />
+                        </uplink>
+                    </pon>
+                </port>
+                <port id="3" type="sfp.electrical" vlanId="1" >
+                    <pon oltId="3" onuAddress="0/1/0/49" serialNumber="ADTN1906086E" vlan="2670">
+                         <uplink address="0/2/0">
+                            <switchPort id="1" port="48" />
+                        </uplink>
+                    </pon>
+                </port>
+            </uplinkPorts>
+            <mgmt id="1" macAddress="00:24:45:64:89:08" ipAddress="5.5.5.56" netmask="24" gateway="5.5.5.254" vlan="143" login="netconf" password="netconf">
+                <switchPort id="2" port="42"/>
+                <console ip="10.49.16.1" connectionType="telnet" port="4" login="adtran" password="adtran"/>
+            </mgmt>
+        </dpu>
+        <olt id="1" type="isam">
+            <mgmt ip="10.49.143.4" port="22" login="isadmin" password="ANS#150"/>
+        </olt>
+        <olt id="2" type="ta5k">
+            <mgmt ip="10.49.233.34" port="22" login="ADMIN" password="PASSWORD"/>
+        </olt>
+        <olt id="3" type="ma560x" >
+            <mgmt ip="10.49.233.205" port="22" login="adtran" password="adtran123"/>
+        </olt>
+    </dut>
+    <environment>
+        <testcenterList>
+            <remote ip="10.49.143.20" port="10013" version="3.0"/>
+            <testcenter ip="10.49.143.61" slot="2" port="12" type="nni" portType="EthernetCopper">
+                <switchPort id="1" port="39"/><!--STC Connected to mentioned port in switch id mentioned-->
+            </testcenter>
+            <testcenter ip="10.49.143.61" slot="2" port="13" type="uni" portType="EthernetCopper">
+                <switchPort id="2" port="35"/><!--STC Connected to mentioned port in switch id mentioned-->
+            </testcenter>
+        </testcenterList>
+        <shenick controllerIp="192.168.0.2">
+            <remote ip="10.3.3.134" port="2202"/>
+            <chassis>
+                <interface name="enp2s5f0" type="nni" switchId="101" switchPort="31" speed="10G">
+                    <vm physicalIf="3/1/0"/>
+                    <vm physicalIf="4/1/0"/>
+                </interface>
+                <interface name="enp2s5f0" type="nni" switchId="101" switchPort="31" speed="10G">
+                    <vm physicalIf="5/1/0"/>
+                    <vm physicalIf="6/1/0"/>
+                </interface>
+            </chassis>
+            <chassis ip="1.2.3.4">
+                <interface name="enp2s5f0" type="uni" switchId="102" switchPort="31" speed="10G">
+                    <vm physicalIf="7/1/0"/>
+                    <vm physicalIf="8/1/0"/>
+                </interface>
+                <interface name="enp2s5f0" type="uni" switchId="102" switchPort="31" speed="10G">
+                    <vm physicalIf="9/1/0"/>
+                    <vm physicalIf="10/1/0"/>
+                </interface>
+            </chassis>
+        </shenick>
+        <packetgenList>
+            <packetgen ip="10.49.143.20" port="2300" ethIF="eth5" type="NNI" login="admin" password="admin123">
+                <switchPort id="11" port="23"/>
+            </packetgen>
+            <packetgen ip="10.49.143.20" port="2300" ethIF="eth6" type="UNI" login="admin" password="admin123">
+                <switchPort id="6" port="41"/>
+            </packetgen>
+        </packetgenList>
+        <tsharkList>
+            <tshark ip="10.49.143.20" port="3801" ethIF="eth5" type="NNI" login="admin" password="admin123">
+                <switchPort id="11" port="23"/>
+            </tshark>
+            <tshark ip="10.0.1.44" port="2011" ethIF="net6" type="NNI" usage="mpls" login="sff00009" password="Winter00">
+                <switchPort id="11" port="23"/>
+            </tshark>
+            <tshark ip="10.49.143.20" port="3801" ethIF="eth6" type="UNI" login="admin" password="admin123">
+                <switchPort id="6" port="41"/>
+            </tshark>
+        </tsharkList>
+        <switchList>
+            <switch id="1" ip="10.49.233.211" login="astra" password="astra123" switchType="X440G2-48t-10G4"/><!--NNI Switch-->
+            <switch id="2" ip="10.49.143.22" login="astra" password="astra123" switchType="X440G2-48t-10G4"/><!--UNI Switch-->
+        </switchList>
+        <ntpList>
+            <ntp ip="10.0.0.8" id="1"/>
+        </ntpList>
+        <dnsList>
+            <dns ip="10.0.0.8" id="1"/>
+            <dns ip="10.2.30.7" id="2"/>
+        </dnsList>
+        <ftpList>
+            <ftp ip="10.0.1.16" homeDir="/taut/testbed" releaseDir="/saps" login="sff00009" password="Winter00" id="1"/>
+            <ftp ip="10.0.1.22" homeDir="/taut/testbed" releaseDir="/saps" login="sff00009" password="Winter00" id="2"/>
+            <sftp id="1" ip="10.49.143.112" login="astra" password="astra123" port="0" homeDir="/srv/dpu" releaseDir="/srv/dpu"/>
+            <sftp id="2" ip="10.49.143.20" login="astra" password="astra123" port="0" homeDir="/tftpboot" releaseDir="/tftpboot"/>
+            <tftp id="1" ip="5.5.5.20" homeDir="/tftpboot" releaseDir="/tftpboot"/>
+            <tftp id="2" ip="5.5.5.62" homeDir="/tftpboot" releaseDir="/tftpboot"/>
+        </ftpList>
+        <dhcpList>
+            <dhcp id="1" ip="10.49.143.63" login="root" password="admin123" ethIf=""/>
+            <dhcp id="2" ip="1.2.3.4" login="" password="" ethIf=""/>
+        </dhcpList>
+        <consoleSwitch ip="10.2.2.132" login="root" password="systemtest">consoleSwitch</consoleSwitch>
+        <lineSimulatorList>
+            <lineSimulator id="1" type="Telebyte" version="458-LM" ip="10.2.2.89" port="2009" serial="1"/>
+        </lineSimulatorList>
+        <ancpList>
+            <ancp outerVlan="4" innerVlan="-1" id="101" partition="-1" protocolVersion="draft00" routeId="1" dutIp="20.0.200.2" dutNetmask="28" brasIp="101.11.22.2"/>
+            <ancp outerVlan="5" innerVlan="-1" id="102" partition="-1" protocolVersion="rfc6320" routeId="1" dutIp="20.0.201.2" dutNetmask="28" brasIp="101.11.22.2"/>
+            <ancp outerVlan="16" innerVlan="-1" id="103" routeId="1" dutIp="20.0.202.2" dutNetmask="28" brasIp="101.11.22.2"/>
+            <ancp outerVlan="17" innerVlan="-1" id="104" routeId="1" dutIp="20.0.203.2" dutNetmask="28" brasIp="101.11.22.2"/>
+            <ancp outerVlan="18" innerVlan="-1" id="105" brasGateway="20.0.204.1" dutIp="20.0.204.2" dutNetmask="28" brasIp="101.11.22.2"/>
+            <ancp outerVlan="19" innerVlan="-1" id="106" brasGateway="20.0.204.1" dutIp="20.0.205.2" dutNetmask="28" brasIp="101.11.22.2"/>
+            <ancp outerVlan="19" innerVlan="6" id="107" brasGateway="" protocolVersion="draft00" dutIp="20.0.206.2" dutNetmask="28" brasIp="101.11.22.2"/>
+        </ancpList>
+        <mirrorList>
+            <mirror ip="10.3.3.92" login="gentoo" password="Winter00" port="2110" ethIF="net8" type="NNI">
+                <switchPort id="601" port="48"/>
+            </mirror>
+            <mirror ip="10.3.3.91" login="gentoo" password="Winter00" port="2110" ethIF="net9" type="UNI">
+                <switchPort id="601" port="47"/>
+            </mirror>
+        </mirrorList>
+        <mpls advertisementMode="dod" routerId="10.10.10.254" localLoopbackIp="10.10.10.4" localLoopbackNetmask="32" localIp="10.10.10.5" localNetmask="24" localVlanId="-1" remoteIp="10.10.10.100">
+            <ags id="1" loopbackIp="20.20.20.0" gatewayIp="20.20.20.20" mgmtType="ssh" mgmtIp="20.20.20.22" login="login20" password="password20" agsType="ags1.1" connectionType="linked" serviceId="1" msanSdpId="2" serviceSdpId="3">
+                <pseudowire id="1" pwType="vpws" md5Password="a" ethernetVlanId="1" vcId="6" usage="dhcp" pppoeUser="j" pppoePassword="m" dhcpProviderIp="20.20.20.1" igmpProviderIp="20.20.20.4" controlWord="true" mtu="11" mtuOffset="16"/>
+                <pseudowire id="2" pwType="vpws" md5Password="b" ethernetVlanId="2" vcId="7" usage="pppoe" pppoeUser="k" pppoePassword="n" dhcpProviderIp="20.20.20.2" igmpProviderIp="20.20.20.5" controlWord="false" mtu="12" mtuOffset="17"/>
+                <pseudowire id="3" pwType="vpws" md5Password="c" ethernetVlanId="3" vcId="8" usage="ethernet" pppoeUser="l" pppoePassword="o" dhcpProviderIp="20.20.20.3" igmpProviderIp="20.20.20.6" controlWord="true" mtu="13" mtuOffset="18"/>
+            </ags>
+            <ags id="2" loopbackIp="30.30.30.0" gatewayIp="30.30.30.30" mgmtType="telnet" mgmtIp="30.30.30.33" login="login30" password="password30" agsType="ags1.1" connectionType="targeted" serviceId="4" msanSdpId="5" serviceSdpId="6">
+                <pseudowire id="1" pwType="vpls" md5Password="aa" ethernetVlanId="4" vcId="9" usage="ethernet" pppoeUser="ag" pppoePassword="ai" dhcpProviderIp="30.30.30.1" igmpProviderIp="30.30.30.3" controlWord="false" mtu="14" mtuOffset="19"/>
+                <pseudowire id="2" pwType="vpls" md5Password="ab" ethernetVlanId="5" vcId="10" usage="dhcp" pppoeUser="ah" pppoePassword="aj" dhcpProviderIp="30.30.30.2" igmpProviderIp="30.30.30.4" controlWord="true" mtu="15" mtuOffset="20"/>
+            </ags>
+            <ags id="4" loopbackIp="40.40.40.0" gatewayIp="40.40.40.40" mgmtType="ssh" mgmtIp="40.40.40.44" login="login40" password="password40" agsType="ags2" connectionType="targeted" serviceId="7" msanSdpId="8" serviceSdpId="9">
+                <pseudowire id="1" pwType="vpls" md5Password="aa" ethernetVlanId="4" vcId="9" usage="ethernet" pppoeUser="ag" pppoePassword="ai" dhcpProviderIp="40.40.40.1" igmpProviderIp="40.40.40.3" controlWord="false" mtu="14" mtuOffset="19"/>
+                <pseudowire id="2" pwType="vpws" md5Password="ab" ethernetVlanId="5" vcId="10" usage="dhcp" pppoeUser="ah" pppoePassword="aj" dhcpProviderIp="40.40.40.2" igmpProviderIp="40.40.40.4" controlWord="true" mtu="15" mtuOffset="20"/>
+            </ags>
+        </mpls>
+        <powerDistributionList>
+            <powerDistribution id="7" ip="10.49.143.242" login="apc" password="apc" type="ap89xx"/><!--UNI 1 -->
+            <powerDistribution id="2" ip="10.49.143.242" login="apc" password="apc" type="ap89xx"/><!--UNI 2 -->
+            <powerDistribution id="3" ip="10.49.143.242" login="apc" password="apc" type="ap89xx"/><!--UNI 3 -->
+            <powerDistribution id="4" ip="10.49.143.242" login="apc" password="apc" type="ap89xx"/><!--UNI 4 -->
+        </powerDistributionList>
+        <vmManagementServerList>
+            <vmManagementServer id="61" ip="10.49.143.80" port="1234" login="root" password="adtran123"/>
+        </vmManagementServerList>        
+        <portServerList>
+            <portServer id="1" ip="10.49.16.1" login="adtran" password="admin123" type="moxa"/> <!-- allowed values for type: 'moxa', 'perle', 'digi-ts16' -->
+        </portServerList>
+    </environment>
+</testbed>
